@@ -1,5 +1,6 @@
 package com.example.bora.ui.screen.signup
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -30,6 +32,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bora.ui.screen.login.Input
 import com.example.bora.ui.screen.login.LoginViewModel
 import com.example.bora.ui.screen.login.PasswordInput
+import com.example.bora.ui.theme.BoraTheme
 
 @Composable
 fun SignupScreen(onSignup: () -> Unit, onClickLogin: () -> Unit, viewModel: SignupViewModel = viewModel()) {
@@ -83,5 +86,13 @@ fun SignupScreen(onSignup: () -> Unit, onClickLogin: () -> Unit, viewModel: Sign
                 Text(text = "Já Possuo Conta")
             }
         }
+    }
+}
+
+@Composable
+@Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun SignupScreenPreview() {
+    BoraTheme {
+        SignupScreen(onSignup = {}, onClickLogin = {})
     }
 }

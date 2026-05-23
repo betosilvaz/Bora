@@ -1,5 +1,6 @@
 package com.example.bora.ui.screen.login
 
+import android.content.res.Configuration
 import android.view.View
 import android.widget.Space
 import androidx.compose.foundation.background
@@ -40,9 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bora.ui.theme.BoraTheme
 
 @Composable
-fun LoginScreen(onLogin: (String, String) -> Unit, onClickSignup: () -> Unit, viewModel: LoginViewModel = viewModel()) {
+fun LoginScreen(onClickLogin: () -> Unit, onClickSignup: () -> Unit, viewModel: LoginViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
     val onChangeUsername = { value: String -> viewModel.updateUsername(value) }
@@ -68,7 +70,7 @@ fun LoginScreen(onLogin: (String, String) -> Unit, onClickSignup: () -> Unit, vi
                 )
             Spacer(modifier = Modifier.height(16.dp))
             Button(
-                onClick = { onLogin(state.username, state.password) },
+                onClick = onClickLogin,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = state.isLoginValid,
                 shape = RoundedCornerShape(8.dp),
@@ -128,4 +130,12 @@ fun PasswordInput(placeholder: String, value: String, isVisible: Boolean, onChan
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
     )
+}
+
+@Composable
+@Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+fun LoginScreenPreview() {
+    BoraTheme {
+        LoginScreen(onClickLogin = {  }, onClickSignup = { })
+    }
 }

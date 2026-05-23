@@ -1,9 +1,12 @@
 package com.example.bora.ui.screen.login
 
+import kotlinx.coroutines.delay
+
 object LoginService {
 
-    fun login(username: String, password: String): LoginResponse {
-        val response = LoginResponse(status = ResponseStatus.ERROR, message = "E-mail já está em uso")
+    suspend fun login(username: String, password: String): LoginResponse {
+        delay(0)
+        val response = LoginResponse(status = ResponseStatus.SUCCESS, message = "E-mail já está em uso")
         return response
     }
 

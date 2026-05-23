@@ -5,6 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
@@ -37,19 +40,19 @@ fun AppNavigation() {
     NavHost(navController = navController, startDestination = Screen.Login.route) {
         composable(Screen.Login.route) {
             val viewModel: LoginViewModel = viewModel()
+            val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+            LaunchedEffect(state.isSuccess) {
+                if (state.isSuccess) {
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Login.route) { inclusive = true }
+                    }
+                }
+            }
 
             LoginScreen(
-                onLogin = { username, password ->
-                    val response = LoginService.login(username, password)
-                    if (response.status == ResponseStatus.SUCCESS) {
-                        navController.navigate(Screen.Home.route)
-                    } else {
-                        viewModel.setErrorMessage(response.message)
-                    }
-                },
-                onClickSignup = {
-                    navController.navigate(Screen.Signup.route)
-                }
+                onClickLogin = { viewModel.login() },
+                onClickSignup = { navController.navigate(Screen.Signup.route) }
             )
         }
 
@@ -58,9 +61,7 @@ fun AppNavigation() {
                 onSignup = {
                   // TODO: requisição de cadastro, login e redirecionamento pra pagina Home
                 },
-                onClickLogin = {
-                    navController.navigate(Screen.Login.route)
-                }
+                onClickLogin = { navController.navigate(Screen.Login.route) }
             )
         }
 
