@@ -25,12 +25,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -63,12 +68,13 @@ fun LoginScreen(onClickLogin: () -> Unit, onClickSignup: () -> Unit, viewModel: 
             Spacer(modifier = Modifier.height(16.dp))
             PasswordInput("••••••••", state.password, state.isVisible, onChangePassword, onToggleVisibility)
             Spacer(modifier = Modifier.height(16.dp))
-            if (state.errorMessage.isNotBlank())
+            if (state.errorMessage.isNotBlank()) {
                 Text(
                     color = Color.Red,
                     text = state.errorMessage
                 )
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
+            }
             Button(
                 onClick = onClickLogin,
                 modifier = Modifier.fillMaxWidth(),
@@ -107,7 +113,7 @@ fun Input(placeholder: String, value: String, onChange: (String) -> Unit, leadin
         value = value,
         onValueChange = onChange,
         singleLine = true,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
     )
 }
 
