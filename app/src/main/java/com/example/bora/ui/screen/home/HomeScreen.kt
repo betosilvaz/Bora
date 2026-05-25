@@ -16,8 +16,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.bora.ui.components.BottomBar
 import com.example.bora.ui.screen.add.AddScreen
@@ -26,35 +28,34 @@ import com.example.bora.ui.screen.map.MapScreen
 import com.example.bora.ui.screen.menu.MenuScreen
 import com.example.bora.ui.screen.search.SearchScreen
 
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen() {
+fun HomeScreen(onLogout: () -> Unit) {
     val navController = rememberNavController()
-    var currentTab by rememberSaveable { mutableStateOf("map") }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route ?: "map"
+
+    val navigateToTab: (String) -> Unit = { route ->
+        navController.navigate(route) {
+            popUpTo(navController.graph.findStartDestination().id) {
+                saveState = true
+            }
+            launchSingleTop = true
+            restoreState = true
+        }
+    }
 
     Surface(
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(bottomBar = {
             BottomBar(
-                onClickMap = {
-                    currentTab = "map"
-                    navController.navigate("map")
-                             },
-                onClickSearch = {
-                    currentTab = "search"
-                    navController.navigate("search") },
-                onClickAdd = {
-                    currentTab = "add"
-                    navController.navigate("add") },
-                onClickEvent = {
-                    currentTab = "events"
-                    navController.navigate("events") },
-                onClickMenu = {
-                    currentTab = "menu"
-                    navController.navigate("menu") },
-                currentTab = currentTab
+                currentTab = currentRoute,
+                onClickMap = { navigateToTab("map") },
+                onClickSearch = { navigateToTab("search") },
+                onClickAdd = { navigateToTab("add") },
+                onClickEvent = { navigateToTab("events") },
+                onClickMenu = { navigateToTab("menu") }
             )
         }) {
             NavHost(navController = navController, startDestination = "map") {
@@ -75,7 +76,7 @@ fun HomeScreen() {
                 }
 
                 composable("menu") {
-                    MenuScreen()
+                    MenuScreen(onLogout = onLogout)
                 }
             }
         }
