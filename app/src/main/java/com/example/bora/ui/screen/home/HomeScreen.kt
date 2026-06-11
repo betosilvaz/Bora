@@ -45,18 +45,22 @@ fun HomeScreen(onLogout: () -> Unit) {
         }
     }
 
+    val pagesWithNavBar = listOf("map", "search", "add", "events", "menu")
+
     Surface(
         color = MaterialTheme.colorScheme.background
     ) {
         Scaffold(bottomBar = {
-            BottomBar(
-                currentTab = currentRoute,
-                onClickMap = { navigateToTab("map") },
-                onClickSearch = { navigateToTab("search") },
-                onClickAdd = { navigateToTab("add") },
-                onClickEvent = { navigateToTab("events") },
-                onClickMenu = { navigateToTab("menu") }
-            )
+            if (pagesWithNavBar.contains(currentRoute)) {
+                BottomBar(
+                    currentTab = currentRoute,
+                    onClickMap = { navigateToTab("map") },
+                    onClickSearch = { navigateToTab("search") },
+                    onClickAdd = { navigateToTab("add") },
+                    onClickEvent = { navigateToTab("events") },
+                    onClickMenu = { navigateToTab("menu") }
+                )
+            }
         }) {
             NavHost(navController = navController, startDestination = "map") {
                 composable("map", exitTransition = { ExitTransition.None }) {
