@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
@@ -49,7 +48,7 @@ fun SignupScreen(onSignup: () -> Unit, onClickLogin: () -> Unit, viewModel: Sign
             Text(
                 fontSize = 36.sp,
                 fontWeight = FontWeight.ExtraBold,
-                text = "Bora!"
+                text = "Bora!",
             )
             Spacer(modifier = Modifier.height(16.dp))
             Input("johndoe", state.username, onChangeUsername, Icons.Outlined.Person)

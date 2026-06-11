@@ -9,7 +9,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -52,7 +51,7 @@ fun AppNavigation() {
 
             LoginScreen(
                 onClickLogin = { viewModel.login() },
-                onClickSignup = { navController.navigate(Screen.Signup.route) }
+                onClickSignup = { navController.navigate(Screen.Signup.route) },
             )
         }
 
@@ -66,12 +65,11 @@ fun AppNavigation() {
         }
 
         composable(Screen.Home.route) {
-            HomeScreen(onLogout = {
+            HomeScreen {
                 navController.navigate(Screen.Login.route) {
                     popUpTo(Screen.Home.route) { inclusive = true }
                 }
-
-            })
+            }
         }
 
     }

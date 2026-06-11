@@ -1,7 +1,6 @@
 package com.example.bora.ui.screen.login
 
 import android.content.res.Configuration
-import android.view.View
 import android.widget.Space
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -61,7 +60,7 @@ fun LoginScreen(onClickLogin: () -> Unit, onClickSignup: () -> Unit, viewModel: 
             Text(
                 fontSize = 36.sp,
                 fontWeight = FontWeight.ExtraBold,
-                text = "Bora!"
+                text = "Bora!",
             )
             Spacer(modifier = Modifier.height(16.dp))
             Input("johndoe", state.username, onChangeUsername, Icons.Outlined.Person)

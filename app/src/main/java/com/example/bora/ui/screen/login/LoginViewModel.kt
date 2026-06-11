@@ -16,7 +16,10 @@ data class LoginUiState(
     val isSuccess: Boolean = false,
     val isLoading: Boolean = false,
 ) {
-    val isLoginValid: Boolean get() = username.isNotBlank() && password.isNotBlank()
+    val isLoginValid: Boolean get() {
+        val isEverythingFilled = username.isNotBlank() && password.isNotBlank()
+        return isEverythingFilled
+    }
 }
 
 class LoginViewModel : ViewModel() {
@@ -54,7 +57,7 @@ class LoginViewModel : ViewModel() {
                    _uiState.update { it.copy(errorMessage = response.message, isLoading = false) }
                }
 
-           } catch (e: Exception) {
+           } catch (_: Exception) {
                _uiState.update { it.copy(isLoading = false, errorMessage = "Erro de conexão") }
            }
         }
