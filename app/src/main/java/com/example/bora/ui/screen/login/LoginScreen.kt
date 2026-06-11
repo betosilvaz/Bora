@@ -76,12 +76,7 @@ fun LoginScreen(onClickLogin: () -> Unit, onClickSignup: () -> Unit, viewModel: 
                 Spacer(modifier = Modifier.height(16.dp))
             }
             Button(
-                onClick = {
-                    if (validateForm(state)) {
-                        onClickLogin()
-                    }
-                    viewModel.setErrorMessage("Todos os campos devem ser preenchidos")
-                },
+                onClick = onClickLogin,
                 modifier = Modifier.fillMaxWidth(),
                 enabled = state.isLoginValid,
                 shape = RoundedCornerShape(8.dp),
@@ -141,10 +136,6 @@ fun PasswordInput(placeholder: String, value: String, isVisible: Boolean, onChan
         singleLine = true,
         modifier = Modifier.fillMaxWidth(),
     )
-}
-
-fun validateForm(state: LoginUiState) : Boolean {
-    return !(state.username.isBlank() || state.password.isBlank())
 }
 
 @Composable
