@@ -75,7 +75,7 @@ fun BottomBar(
                     IconButton(
                         modifier = buttonModifier,
                         onClick = onClickEvent,
-                        colors = if(currentTab == "events") IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary) else IconButtonDefaults.iconButtonColors()
+                        colors = if(currentTab == "event") IconButtonDefaults.iconButtonColors(contentColor = MaterialTheme.colorScheme.primary) else IconButtonDefaults.iconButtonColors()
                     ) {
                         Icon(imageVector = Icons.Outlined.Event, contentDescription = null, modifier = iconModifier)
                     }
