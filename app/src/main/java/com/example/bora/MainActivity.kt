@@ -151,7 +151,13 @@ fun Router() {
                     SearchScreen()
                 }
                 composable(Route.Add.route) {
-                    AddScreen()
+                    AddScreen(
+                        onSaveSuccess = {
+                            navController.navigate(Route.Event.route) {
+                                popUpTo(Route.Add.route) { inclusive = true }
+                            }
+                        }
+                    )
                 }
                 composable(Route.Event.route) {
                     EventsScreen()
