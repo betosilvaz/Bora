@@ -2,6 +2,8 @@ package com.example.bora.ui.screen.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bora.localStorage.LocalStorage
+import com.example.bora.repository.UserRepository
 import com.example.bora.service.AuthenticationService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -53,6 +55,9 @@ class LoginViewModel : ViewModel() {
                val success = AuthenticationService.login(_uiState.value.email, _uiState.value.password)
 
                if (success) {
+                   val user = UserRepository.getByEmail(_uiState.value.email)
+                   LocalStorage.setItem("userId", user!!.id)
+                   LocalStorage.setItem("username", user!!.username)
                    _uiState.update { it.copy(isSuccess = true, isLoading = false, errorMessage = "") }
                } else {
                    _uiState.update { it.copy(errorMessage = "Credenciais inválidas.", isLoading = false) }
