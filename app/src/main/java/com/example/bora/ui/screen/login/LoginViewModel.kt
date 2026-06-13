@@ -2,6 +2,7 @@ package com.example.bora.ui.screen.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.bora.service.AuthenticationService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -9,7 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 data class LoginUiState(
-    val username: String = "",
+    val email: String = "",
     val password: String = "",
     val isVisible: Boolean = false,
     val errorMessage: String = "",
@@ -17,7 +18,7 @@ data class LoginUiState(
     val isLoading: Boolean = false,
 ) {
     val isLoginValid: Boolean get() {
-        val isEverythingFilled = username.isNotBlank() && password.isNotBlank()
+        val isEverythingFilled = email.isNotBlank() && password.isNotBlank()
         return isEverythingFilled
     }
 }
@@ -28,8 +29,8 @@ class LoginViewModel : ViewModel() {
 
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
-    fun updateUsername(username: String) {
-        _uiState.update { it.copy(username =  username) }
+    fun updateEmail(email: String) {
+        _uiState.update { it.copy(email =  email) }
     }
 
     fun updatePassword(password: String) {
@@ -49,12 +50,12 @@ class LoginViewModel : ViewModel() {
            try {
                _uiState.update { it.copy(isLoading = true) }
 
-               val response = LoginService.login(_uiState.value.username, _uiState.value.password)
+               val success = AuthenticationService.login(_uiState.value.email, _uiState.value.password)
 
-               if (response.status == ResponseStatus.SUCCESS) {
+               if (success) {
                    _uiState.update { it.copy(isSuccess = true, isLoading = false, errorMessage = "") }
                } else {
-                   _uiState.update { it.copy(errorMessage = response.message, isLoading = false) }
+                   _uiState.update { it.copy(errorMessage = "Credenciais inválidas.", isLoading = false) }
                }
 
            } catch (_: Exception) {
