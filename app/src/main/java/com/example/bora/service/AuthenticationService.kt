@@ -46,6 +46,7 @@ object AuthenticationService {
             return Response("ERROR", "E-mail já está em uso.")
         }
 
+        UserRepository.create(dto)
         return Response("SUCCESS", "Usuário cadastrado com sucesso.")
     }
 
