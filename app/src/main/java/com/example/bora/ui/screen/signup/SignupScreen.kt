@@ -53,7 +53,8 @@ fun SignupScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(top = 48.dp)
+                .padding(top = 48.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Criar Conta",
@@ -138,17 +139,6 @@ fun SignupScreen(
                 ) {
                     Text(text = "Já tenho conta", fontSize = 15.sp)
                 }
-
-                Spacer(modifier = Modifier.height(14.dp))
-
-                Text(
-                    text = "Ao criar uma conta, você concorda com\nnossos termos de uso e política de privacidade.",
-                    fontSize = 11.sp,
-                    lineHeight = 16.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.fillMaxWidth()
-                )
             }
         }
     }

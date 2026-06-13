@@ -1,6 +1,7 @@
 package com.example.bora.ui.screen.forgotPassword
 
 import android.content.res.Configuration
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,7 +52,8 @@ fun ForgotPasswordScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
-                .padding(top = 48.dp)
+                .padding(top = 48.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Esqueci Minha Senha",

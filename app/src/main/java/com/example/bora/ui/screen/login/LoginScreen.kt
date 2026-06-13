@@ -64,8 +64,8 @@ fun LoginScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(top = 48.dp)
+                .padding(top = 48.dp),
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
                 text = "Entrar",
