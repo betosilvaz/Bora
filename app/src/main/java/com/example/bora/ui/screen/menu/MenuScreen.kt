@@ -36,7 +36,11 @@ import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun MenuScreen(state: MenuUiState, onLogout: () -> Unit) {
+fun MenuScreen(
+    state: MenuUiState,
+    onLogout: () -> Unit,
+    onClickAccount: () -> Unit,
+) {
     val scrollState = rememberScrollState()
 
     Surface(
@@ -82,7 +86,7 @@ fun MenuScreen(state: MenuUiState, onLogout: () -> Unit) {
                 )
                 Text(
                     text = state.username,
-                    fontSize = 48.sp, // Ligeiramente menor que o 72sp do login para acomodar nomes
+                    fontSize = 48.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = (-2).sp,
                     lineHeight = 48.sp,
@@ -108,7 +112,7 @@ fun MenuScreen(state: MenuUiState, onLogout: () -> Unit) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 OutlinedButton(
-                    onClick = { /* TODO */ },
+                    onClick = onClickAccount,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(46.dp),

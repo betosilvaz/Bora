@@ -19,7 +19,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.bora.localStorage.LocalStorage
+import com.example.bora.model.User
+import com.example.bora.repository.UserRepository
 import com.example.bora.ui.components.BottomBar
+import com.example.bora.ui.screen.account.AccountScreen
+import com.example.bora.ui.screen.account.AccountViewModel
 import com.example.bora.ui.screen.add.AddScreen
 import com.example.bora.ui.screen.events.EventsScreen
 import com.example.bora.ui.screen.forgotPassword.ForgotPasswordScreen
@@ -160,6 +164,7 @@ fun Router() {
 
                     MenuScreen(
                         state = state,
+                        onClickAccount = { navController.navigate(Route.Account.route) },
                         onLogout = {
                             viewModel.logout()
                             navController.navigate(Route.Login.route) {
@@ -167,6 +172,28 @@ fun Router() {
                             }
                         },
                     )
+                }
+                composable(Route.Account.route) {
+                    val viewModel: AccountViewModel = viewModel()
+                    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+                    AccountScreen(
+                        state = state,
+                        onToggleEditMode = { viewModel.toggleEditMode() },
+                        onSaveClick = { viewModel.save() },
+                        onUsernameChange = { viewModel.updateUsername(it) },
+                        onEmailChange = { viewModel.updateEmail(it) },
+                        onCurrentPasswordChange = { viewModel.updateCurrentPassword(it) },
+                        onNewPasswordChange = { viewModel.updateNewPassword(it) },
+                        onConfirmPasswordChange = { viewModel.updateConfirmNewPassword(it) },
+                        onTogglePasswordVisibility = { viewModel.togglePasswordVisibility(it)  },
+                    )
+                }
+                composable(Route.Settings.route) {
+
+                }
+                composable(Route.Details.route) {
+
                 }
             }
         }
