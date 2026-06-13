@@ -1,6 +1,7 @@
 package com.example.bora.ui.screen.signup
 
 import android.content.res.Configuration
+import android.widget.Space
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -31,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -48,17 +50,16 @@ import com.example.bora.ui.theme.BoraTheme
 
 @Composable
 fun SignupScreen(
+    state: SignupUiState,
     onSignup: () -> Unit,
     onClickLogin: () -> Unit,
     viewModel: SignupViewModel = viewModel()
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier.fillMaxSize().safeDrawingPadding().verticalScroll(scrollState)) {
 
-            // ── Hero ──────────────────────────────────────────────
             Column(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)
@@ -90,7 +91,6 @@ fun SignupScreen(
                 )
             }
 
-            // ── Form sheet ────────────────────────────────────────
             HorizontalDivider(thickness = 0.5.dp)
             Column(
                 modifier = Modifier
@@ -159,6 +159,10 @@ fun SignupScreen(
                 }
 
                 Spacer(modifier = Modifier.height(18.dp))
+                if (state.errorMessage.isNotBlank()) {
+                    Text(text = state.errorMessage, color = Color.Red, fontSize = 12.sp)
+                    Spacer(modifier = Modifier.height(18.dp))
+                }
                 Button(
                     onClick = onSignup,
                     modifier = Modifier.fillMaxWidth().height(44.dp),
@@ -215,12 +219,4 @@ fun SectionEyebrow(text: String) {
         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
         modifier = Modifier.padding(bottom = 10.dp)
     )
-}
-
-@Composable
-@Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-fun SignupScreenPreview() {
-    BoraTheme {
-        SignupScreen(onSignup = {}, onClickLogin = {})
-    }
 }
