@@ -20,7 +20,6 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.PersonOutline
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -32,11 +31,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
+import com.example.bora.ui.screen.login.FieldLabel
 import com.example.bora.ui.screen.login.Input
 import com.example.bora.ui.screen.login.PasswordInput
-import com.example.bora.ui.screen.login.FieldLabel
 
 @Composable
 fun AccountScreen(
@@ -62,39 +60,20 @@ fun AccountScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
+                .padding(top = 48.dp)
         ) {
-            // Cabeçalho
+            Text(
+                text = if (state.isEditing) "Editar Perfil" else "Seu Perfil",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(horizontal = 32.dp)
+            )
+
             Column(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)
-                    .padding(top = 80.dp, bottom = 40.dp),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Text(
-                    text = "CONTA",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.14.em,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
-                Text(
-                    text = if (state.isEditing) "Editar Perfil" else "Seu Perfil",
-                    fontSize = 48.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = (-2).sp,
-                    lineHeight = 48.sp,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            HorizontalDivider(thickness = 0.5.dp)
-
-            // Conteúdo (Alterna entre Visualização e Edição)
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .padding(top = 28.dp, bottom = 36.dp)
+                    .padding(top = 42.dp, bottom = 120.dp)
             ) {
                 if (state.isEditing) {
                     EditProfileContent(
@@ -129,29 +108,27 @@ private fun ViewProfileContent(
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = state.username,
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(20.dp))
 
         FieldLabel("E-mail")
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = state.email,
-            fontSize = 18.sp,
+            fontSize = 16.sp,
             fontWeight = FontWeight.Medium,
             color = MaterialTheme.colorScheme.onSurface
         )
 
-        Spacer(modifier = Modifier.height(48.dp))
+        Spacer(modifier = Modifier.height(36.dp))
 
         OutlinedButton(
             onClick = onEditClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(46.dp),
+            modifier = Modifier.fillMaxWidth().height(46.dp),
             shape = RoundedCornerShape(4.dp),
         ) {
             Row(
@@ -178,16 +155,6 @@ private fun EditProfileContent(
     onTogglePasswordVisibility: (PasswordType) -> Unit
 ) {
     Column {
-        // Dados Pessoais
-        Text(
-            text = "Dados Pessoais",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            letterSpacing = 0.01.em
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
         FieldLabel("Nome de Usuário")
         Spacer(modifier = Modifier.height(4.dp))
         Input(
@@ -209,24 +176,12 @@ private fun EditProfileContent(
             keyboardType = KeyboardType.Email
         )
 
-        Spacer(modifier = Modifier.height(32.dp))
-        HorizontalDivider(thickness = 0.5.dp)
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Segurança
-        Text(
-            text = "Segurança (Alterar Senha)",
-            fontSize = 12.sp,
-            fontWeight = FontWeight.Medium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-            letterSpacing = 0.01.em
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        FieldLabel("Senha Atual (Obrigatório para salvar)")
+        FieldLabel("Senha Atual")
         Spacer(modifier = Modifier.height(4.dp))
         PasswordInput(
-            placeholder = "••••••••",
+            placeholder = "Senha atual (obrigatória para salvar)",
             value = state.currentPasswordInput,
             isVisible = state.isCurrentPasswordVisible,
             onChange = onCurrentPasswordChange,
@@ -238,7 +193,7 @@ private fun EditProfileContent(
         FieldLabel("Nova Senha")
         Spacer(modifier = Modifier.height(4.dp))
         PasswordInput(
-            placeholder = "••••••••",
+            placeholder = "Nova senha",
             value = state.newPasswordInput,
             isVisible = state.isNewPasswordVisible,
             onChange = onNewPasswordChange,
@@ -250,7 +205,7 @@ private fun EditProfileContent(
         FieldLabel("Confirmar Nova Senha")
         Spacer(modifier = Modifier.height(4.dp))
         PasswordInput(
-            placeholder = "••••••••",
+            placeholder = "Confirme a nova senha",
             value = state.confirmPasswordInput,
             isVisible = state.isConfirmPasswordVisible,
             onChange = onConfirmPasswordChange,
@@ -259,14 +214,11 @@ private fun EditProfileContent(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        // Botões de Ação
         Button(
             onClick = onSaveClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(46.dp),
+            modifier = Modifier.fillMaxWidth().height(46.dp),
             shape = RoundedCornerShape(4.dp),
-            enabled = state.currentPasswordInput.isNotBlank() // Exemplo de validação básica
+            enabled = state.currentPasswordInput.isNotBlank()
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(Icons.Outlined.Check, contentDescription = null, modifier = Modifier.size(20.dp))
@@ -278,9 +230,7 @@ private fun EditProfileContent(
 
         OutlinedButton(
             onClick = onCancelClick,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(46.dp),
+            modifier = Modifier.fillMaxWidth().height(46.dp),
             shape = RoundedCornerShape(4.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {

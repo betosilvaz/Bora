@@ -20,7 +20,6 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,7 +29,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +42,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.bora.ui.theme.BoraTheme
 
@@ -68,43 +65,20 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
+                .padding(top = 48.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 32.dp)
-                    .padding(top = 80.dp, bottom = 40.dp),
-                verticalArrangement = Arrangement.Bottom
-            ) {
-                Text(
-                    text = "Bem-vindo de volta",
-                    fontSize = 11.sp,
-                    fontWeight = FontWeight.Medium,
-                    letterSpacing = 0.14.em,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.45f),
-                    modifier = Modifier.padding(bottom = 6.dp)
-                )
-                Text(
-                    text = "Bora!",
-                    fontSize = 72.sp,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = (-2).sp,
-                    lineHeight = 72.sp,
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = "Encontre eventos, conecte pessoas,\nviva a cidade.",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Light,
-                    lineHeight = 21.sp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-                )
-            }
+            Text(
+                text = "Entrar",
+                fontSize = 32.sp,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                modifier = Modifier.padding(horizontal = 32.dp)
+            )
 
-            HorizontalDivider(thickness = 0.5.dp)
             Column(
                 modifier = Modifier
                     .padding(horizontal = 32.dp)
-                    .padding(top = 28.dp, bottom = 36.dp)
+                    .padding(top = 42.dp, bottom = 120.dp)
             ) {
                 FieldLabel("E-mail")
                 Spacer(modifier = Modifier.height(4.dp))
@@ -151,24 +125,13 @@ fun LoginScreen(
                 ) {
                     Text(text = "Entrar", fontSize = 15.sp, fontWeight = FontWeight.Medium)
                 }
-                Spacer(modifier = Modifier.height(18.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    HorizontalDivider(modifier = Modifier.weight(1f), thickness = 0.5.dp)
-                    Text(
-                        text = "ou",
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
-                    )
-                    HorizontalDivider(modifier = Modifier.weight(1f), thickness = 0.5.dp)
-                }
                 Spacer(modifier = Modifier.height(14.dp))
                 OutlinedButton(
                     onClick = onClickSignup,
                     modifier = Modifier.fillMaxWidth().height(46.dp),
                     shape = RoundedCornerShape(4.dp),
                 ) {
-                    Text(text = "Cadastrar-se", fontSize = 15.sp, fontWeight = FontWeight.Normal)
+                    Text(text = "Cadastrar-se", fontSize = 15.sp)
                 }
             }
         }
