@@ -25,7 +25,11 @@ import com.example.bora.ui.components.BottomBar
 import com.example.bora.ui.screen.account.AccountScreen
 import com.example.bora.ui.screen.account.AccountViewModel
 import com.example.bora.ui.screen.add.AddScreen
+import com.example.bora.ui.screen.add.AddViewModel
+import com.example.bora.ui.screen.details.DetailsScreen
+import com.example.bora.ui.screen.details.DetailsViewModel
 import com.example.bora.ui.screen.events.EventsScreen
+import com.example.bora.ui.screen.events.EventsViewModel
 import com.example.bora.ui.screen.forgotPassword.ForgotPasswordScreen
 import com.example.bora.ui.screen.login.LoginScreen
 import com.example.bora.ui.screen.login.LoginViewModel
@@ -33,6 +37,7 @@ import com.example.bora.ui.screen.map.MapScreen
 import com.example.bora.ui.screen.menu.MenuScreen
 import com.example.bora.ui.screen.menu.MenuViewModel
 import com.example.bora.ui.screen.search.SearchScreen
+import com.example.bora.ui.screen.search.SearchViewModel
 import com.example.bora.ui.screen.signup.SignupScreen
 import com.example.bora.ui.screen.signup.SignupViewModel
 import com.example.bora.ui.theme.BoraTheme
@@ -148,19 +153,42 @@ fun Router() {
                     MapScreen()
                 }
                 composable(Route.Search.route) {
-                    SearchScreen()
+                    val viewModel: SearchViewModel = viewModel()
+                    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+                    SearchScreen(
+                        state = state,
+                        onClickEvent = { eventId ->
+                            navController.navigate("details/$eventId")
+                        },
+                        viewModel = viewModel
+                    )
                 }
                 composable(Route.Add.route) {
+                    val viewModel: AddViewModel = viewModel()
+                    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
                     AddScreen(
+                        state = state,
                         onSaveSuccess = {
                             navController.navigate(Route.Event.route) {
                                 popUpTo(Route.Add.route) { inclusive = true }
                             }
-                        }
+                        },
+                        viewModel = viewModel
                     )
                 }
                 composable(Route.Event.route) {
-                    EventsScreen()
+                    val viewModel: EventsViewModel = viewModel()
+                    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+                    EventsScreen(
+                        state = state,
+                        onClickEvent = { eventId ->
+                            navController.navigate("details/$eventId")
+                        },
+                        viewModel = viewModel
+                    )
                 }
                 composable(Route.Menu.route) {
                     val viewModel: MenuViewModel = viewModel()
@@ -198,8 +226,20 @@ fun Router() {
                 composable(Route.Settings.route) {
 
                 }
-                composable(Route.Details.route) {
+                composable(Route.Details.route) { backStackEntry ->
+                    val eventId = backStackEntry.arguments?.getString("id") ?: return@composable
+                    val viewModel: DetailsViewModel = viewModel()
+                    val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+                    LaunchedEffect(eventId) {
+                        viewModel.loadEvent(eventId)
+                    }
+
+                    DetailsScreen(
+                        state = state,
+                        onClickBack = { navController.popBackStack() },
+                        onParticipate = { viewModel.participate() }
+                    )
                 }
             }
         }

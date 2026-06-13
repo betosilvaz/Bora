@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -22,10 +21,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -33,25 +29,23 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bora.localStorage.LocalStorage
-import com.example.bora.model.Event
-import com.example.bora.repository.EventRepository
 import com.example.bora.ui.screen.login.FieldLabel
-import java.util.UUID
 
 @Composable
-fun AddScreen(onSaveSuccess: () -> Unit) {
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var address by remember { mutableStateOf("") }
-    var date by remember { mutableStateOf("") }
-    var hasGuestLimit by remember { mutableStateOf(false) }
-    var guestLimit by remember { mutableStateOf("") }
-    var isPublic by remember { mutableStateOf(false) }
-
+fun AddScreen(
+    state: AddUiState,
+    onSaveSuccess: () -> Unit,
+    viewModel: AddViewModel,
+) {
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    val isValid = name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && date.isNotBlank()
+
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            Toast.makeText(context, "Rolê criado!", Toast.LENGTH_SHORT).show()
+            onSaveSuccess()
+        }
+    }
 
     Surface(
         modifier = Modifier
@@ -81,8 +75,8 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                 FieldLabel("Nome do evento")
                 Spacer(modifier = Modifier.height(4.dp))
                 OutlinedTextField(
-                    value = name,
-                    onValueChange = { name = it },
+                    value = state.name,
+                    onValueChange = { viewModel.updateName(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text("ex: Churrasco na Praia") },
                     shape = RoundedCornerShape(4.dp),
@@ -94,8 +88,8 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                 FieldLabel("Descrição")
                 Spacer(modifier = Modifier.height(4.dp))
                 OutlinedTextField(
-                    value = description,
-                    onValueChange = { description = it },
+                    value = state.description,
+                    onValueChange = { viewModel.updateDescription(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text("Descreva seu rolê...") },
                     shape = RoundedCornerShape(4.dp),
@@ -108,8 +102,8 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                 FieldLabel("Endereço")
                 Spacer(modifier = Modifier.height(4.dp))
                 OutlinedTextField(
-                    value = address,
-                    onValueChange = { address = it },
+                    value = state.address,
+                    onValueChange = { viewModel.updateAddress(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text("ex: Av. Boa Viagem, 1500 - Boa Viagem, Recife - PE") },
                     shape = RoundedCornerShape(4.dp),
@@ -121,8 +115,8 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                 FieldLabel("Dia e hora")
                 Spacer(modifier = Modifier.height(4.dp))
                 OutlinedTextField(
-                    value = date,
-                    onValueChange = { date = it },
+                    value = state.date,
+                    onValueChange = { viewModel.updateDate(it) },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = { Text("dd/MM/yy - HH:mm") },
                     shape = RoundedCornerShape(4.dp),
@@ -143,8 +137,8 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                         modifier = Modifier.weight(1f)
                     )
                     Switch(
-                        checked = hasGuestLimit,
-                        onCheckedChange = { hasGuestLimit = it },
+                        checked = state.hasGuestLimit,
+                        onCheckedChange = { viewModel.updateHasGuestLimit(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
                             checkedTrackColor = MaterialTheme.colorScheme.primary,
@@ -154,11 +148,11 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                     )
                 }
 
-                if (hasGuestLimit) {
+                if (state.hasGuestLimit) {
                     Spacer(modifier = Modifier.height(8.dp))
                     OutlinedTextField(
-                        value = guestLimit,
-                        onValueChange = { guestLimit = it.filter { c -> c.isDigit() } },
+                        value = state.guestLimit,
+                        onValueChange = { viewModel.updateGuestLimit(it) },
                         modifier = Modifier.fillMaxWidth(),
                         placeholder = { Text("Número máximo de convidados") },
                         shape = RoundedCornerShape(4.dp),
@@ -181,8 +175,8 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                         modifier = Modifier.weight(1f)
                     )
                     Switch(
-                        checked = isPublic,
-                        onCheckedChange = { isPublic = it },
+                        checked = state.isPublic,
+                        onCheckedChange = { viewModel.updateIsPublic(it) },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
                             checkedTrackColor = MaterialTheme.colorScheme.primary,
@@ -195,24 +189,9 @@ fun AddScreen(onSaveSuccess: () -> Unit) {
                 Spacer(modifier = Modifier.height(24.dp))
 
                 Button(
-                    onClick = {
-                        val event = Event(
-                            id = UUID.randomUUID().toString(),
-                            hostId = LocalStorage.getItem("userId") ?: "unknown",
-                            name = name,
-                            description = description,
-                            address = address,
-                            date = date,
-                            hasGuestLimit = hasGuestLimit,
-                            guestLimit = guestLimit.toIntOrNull() ?: 0,
-                            isPublic = isPublic
-                        )
-                        EventRepository.all().add(event)
-                        Toast.makeText(context, "Rolê criado!", Toast.LENGTH_SHORT).show()
-                        onSaveSuccess()
-                    },
+                    onClick = { viewModel.save() },
                     modifier = Modifier.fillMaxWidth().height(46.dp),
-                    enabled = isValid,
+                    enabled = state.isValid,
                     shape = RoundedCornerShape(4.dp)
                 ) {
                     Text(text = "Salvar", fontSize = 15.sp, fontWeight = FontWeight.Medium)

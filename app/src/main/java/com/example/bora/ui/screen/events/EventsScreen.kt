@@ -15,32 +15,27 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.bora.localStorage.LocalStorage
-import com.example.bora.repository.EventRepository
 import com.example.bora.ui.screen.search.CategoryChip
 import com.example.bora.ui.screen.search.ExploreEventCard
 
 @Composable
-fun EventsScreen() {
-    var selectedFilter by remember { mutableStateOf("Anfitrião") }
-    val userId = remember { LocalStorage.getItem("userId") ?: "" }
-    val events = remember { EventRepository.all() }
+fun EventsScreen(
+    state: EventsUiState,
+    onClickEvent: (String) -> Unit = {},
+    viewModel: EventsViewModel,
+) {
     val scrollState = rememberScrollState()
 
     val filters = listOf("Anfitrião", "Participante")
 
-    val filteredEvents = when (selectedFilter) {
-        "Anfitrião" -> events.filter { it.hostId == userId }
-        "Participante" -> events.filter { it.participants.any { p -> p.id == userId } }
-        else -> events
+    val filteredEvents = when (state.selectedFilter) {
+        "Anfitrião" -> state.events.filter { it.hostId == viewModel.userId }
+        "Participante" -> state.events.filter { it.participants.any { p -> p.id == viewModel.userId } }
+        else -> state.events
     }
 
     Surface(
@@ -74,8 +69,8 @@ fun EventsScreen() {
                     items(filters) { filter ->
                         CategoryChip(
                             text = filter,
-                            isSelected = filter == selectedFilter,
-                            onClick = { selectedFilter = filter }
+                            isSelected = filter == state.selectedFilter,
+                            onClick = { viewModel.selectFilter(filter) }
                         )
                     }
                 }
@@ -83,7 +78,10 @@ fun EventsScreen() {
                 Spacer(modifier = Modifier.height(20.dp))
 
                 filteredEvents.forEach { event ->
-                    ExploreEventCard(event = event)
+                    ExploreEventCard(
+                        event = event,
+                        onClick = { onClickEvent(event.id) }
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
 

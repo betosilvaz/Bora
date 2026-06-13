@@ -67,7 +67,7 @@ object EventRepository {
         ))
     }
 
-    fun all() : MutableList<Event> {
+    suspend fun all() : MutableList<Event> {
         return repo
     }
 
