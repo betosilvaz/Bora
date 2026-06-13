@@ -16,7 +16,9 @@ import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.location.LocationPuck
 import org.maplibre.compose.location.rememberDefaultLocationProvider
 import org.maplibre.compose.location.rememberUserLocationState
+import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
+import org.maplibre.compose.map.OrnamentOptions
 import org.maplibre.compose.style.BaseStyle
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -47,6 +49,9 @@ fun MapScreen() {
         baseStyle = BaseStyle.Uri("https://tiles.openfreemap.org/styles/fiord"),
         modifier = Modifier.fillMaxSize(),
         cameraState = cameraState,
+        options = MapOptions(
+            ornamentOptions = OrnamentOptions.OnlyLogo
+        )
     ) {
         if (hasLocationPermission) {
             val locationProvider = rememberDefaultLocationProvider()
