@@ -50,33 +50,27 @@ import com.example.bora.ui.theme.BoraTheme
 
 @Composable
 fun LoginScreen(
+    state: LoginUiState,
     onClickLogin: () -> Unit,
     onClickSignup: () -> Unit,
     onClickForgotPassword: () -> Unit,
     viewModel: LoginViewModel = viewModel()
 ) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-
-    // 1. Criamos o estado de rolagem da tela
     val scrollState = rememberScrollState()
 
     Surface(
         modifier = Modifier
             .fillMaxSize()
-            .safeDrawingPadding(), // 2. O Surface empurra tudo para a área segura (barras e teclado)
+            .safeDrawingPadding(),
         color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState) // 3. Habilitamos a rolagem no container principal
+                .verticalScroll(scrollState)
         ) {
-
-            // ── Hero ──────────────────────────────────────────────
             Column(
                 modifier = Modifier
-                    // 4. Trocamos o .weight(1f) por um padding no topo.
-                    // Isso mantém o texto empurrado para baixo sem quebrar a rolagem!
                     .padding(horizontal = 32.dp)
                     .padding(top = 80.dp, bottom = 40.dp),
                 verticalArrangement = Arrangement.Bottom
@@ -106,7 +100,6 @@ fun LoginScreen(
                 )
             }
 
-            // ── Form sheet ────────────────────────────────────────
             HorizontalDivider(thickness = 0.5.dp)
             Column(
                 modifier = Modifier
@@ -243,6 +236,6 @@ fun PasswordInput(
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 fun LoginScreenPreview() {
     BoraTheme {
-        LoginScreen(onClickLogin = {}, onClickSignup = {}, onClickForgotPassword = {})
+        LoginScreen(LoginUiState(), onClickLogin = {}, onClickSignup = {}, onClickForgotPassword = { })
     }
 }
