@@ -18,6 +18,8 @@ data class AddUiState(
     val name: String = "",
     val description: String = "",
     val address: String = "",
+    val lat: Double? = null,
+    val lng: Double? = null,
     val date: LocalDateTime? = null,
     val hasGuestLimit: Boolean = false,
     val guestLimit: String = "",
@@ -27,7 +29,7 @@ data class AddUiState(
     val extraSections: MutableList<ExtraSection> = mutableListOf()
 ) {
     val isValid: Boolean get() =
-        name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && date != null
+        name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && date != null && lat != null && lng != null
 }
 
 class AddViewModel : ViewModel() {
@@ -41,6 +43,12 @@ class AddViewModel : ViewModel() {
     fun updateHasGuestLimit(value: Boolean) { _uiState.update { it.copy(hasGuestLimit = value, guestLimit = if (!value) "" else it.guestLimit) } }
     fun updateGuestLimit(value: String) { _uiState.update { it.copy(guestLimit = value.filter { c -> c.isDigit() }) } }
     fun updateIsPublic(value: Boolean) { _uiState.update { it.copy(isPublic = value) } }
+
+    fun updateLat(lat: Double) { _uiState.update { it.copy(lat = lat) } }
+    fun updateLng(lng: Double) { _uiState.update { it.copy(lng = lng) } }
+    fun updateLocation(address: String, lat: Double, lng: Double) {
+        _uiState.update { it.copy(address = address, lat = lat, lng = lng) }
+    }
 
     fun addExtraSection() {
         _uiState.update {
@@ -82,6 +90,8 @@ class AddViewModel : ViewModel() {
                 name = state.name,
                 description = state.description,
                 address = state.address,
+                lat = state.lat!!,
+                lng = state.lng!!,
                 date = state.date!!,
                 hasGuestLimit = state.hasGuestLimit,
                 guestLimit = state.guestLimit.toIntOrNull() ?: 0,

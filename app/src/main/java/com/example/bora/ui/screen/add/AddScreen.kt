@@ -67,6 +67,7 @@ fun AddScreen(
     val scrollState = rememberScrollState()
     var showDatePicker by remember { mutableStateOf(false) }
     var showTimePicker by remember { mutableStateOf(false) }
+    var showMapPicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val timePickerState = rememberTimePickerState(is24Hour = true)
 
@@ -137,14 +138,25 @@ fun AddScreen(
             .safeDrawingPadding(),
         color = MaterialTheme.colorScheme.background
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(top = 48.dp)
-        ) {
-            Text(
-                text = "Novo Rolê",
+        if (showMapPicker) {
+            MapPickerContent(
+                initialLat = state.lat,
+                initialLng = state.lng,
+                onConfirm = { address, lat, lng ->
+                    viewModel.updateLocation(address, lat, lng)
+                    showMapPicker = false
+                },
+                onDismiss = { showMapPicker = false }
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(top = 48.dp)
+            ) {
+                Text(
+                    text = "Novo Rolê",
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -193,6 +205,15 @@ fun AddScreen(
                     shape = RoundedCornerShape(4.dp),
                     singleLine = true
                 )
+
+                Spacer(modifier = Modifier.height(8.dp))
+                OutlinedButton(
+                    onClick = { showMapPicker = true },
+                    modifier = Modifier.fillMaxWidth().height(46.dp),
+                    shape = RoundedCornerShape(4.dp)
+                ) {
+                    Text(text = "Selecionar no mapa", fontSize = 14.sp, fontWeight = FontWeight.Medium)
+                }
 
                 Spacer(modifier = Modifier.height(14.dp))
 
@@ -361,6 +382,7 @@ fun AddScreen(
                     Text(text = "Salvar", fontSize = 15.sp, fontWeight = FontWeight.Medium)
                 }
             }
+        }
         }
     }
 }

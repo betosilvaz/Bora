@@ -11,6 +11,8 @@ data class Event(
     var name: String,
     var description: String,
     var address: String,
+    var lat: Double,
+    var lng: Double,
     var date: LocalDateTime,
     var hasGuestLimit: Boolean,
     var guestLimit: Int,
