@@ -11,13 +11,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 import java.util.UUID
 
 data class AddUiState(
     val name: String = "",
     val description: String = "",
     val address: String = "",
-    val date: String = "",
+    val date: LocalDateTime? = null,
     val hasGuestLimit: Boolean = false,
     val guestLimit: String = "",
     val isPublic: Boolean = false,
@@ -26,7 +27,7 @@ data class AddUiState(
     val extraSections: MutableList<ExtraSection> = mutableListOf()
 ) {
     val isValid: Boolean get() =
-        name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && date.isNotBlank()
+        name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && date != null
 }
 
 class AddViewModel : ViewModel() {
@@ -36,7 +37,7 @@ class AddViewModel : ViewModel() {
     fun updateName(name: String) { _uiState.update { it.copy(name = name) } }
     fun updateDescription(description: String) { _uiState.update { it.copy(description = description) } }
     fun updateAddress(address: String) { _uiState.update { it.copy(address = address) } }
-    fun updateDate(date: String) { _uiState.update { it.copy(date = date) } }
+    fun updateDate(date: LocalDateTime) { _uiState.update { it.copy(date = date) } }
     fun updateHasGuestLimit(value: Boolean) { _uiState.update { it.copy(hasGuestLimit = value, guestLimit = if (!value) "" else it.guestLimit) } }
     fun updateGuestLimit(value: String) { _uiState.update { it.copy(guestLimit = value.filter { c -> c.isDigit() }) } }
     fun updateIsPublic(value: Boolean) { _uiState.update { it.copy(isPublic = value) } }
@@ -81,7 +82,7 @@ class AddViewModel : ViewModel() {
                 name = state.name,
                 description = state.description,
                 address = state.address,
-                date = state.date,
+                date = state.date!!,
                 hasGuestLimit = state.hasGuestLimit,
                 guestLimit = state.guestLimit.toIntOrNull() ?: 0,
                 isPublic = state.isPublic,

@@ -1,6 +1,7 @@
 package com.example.bora.repository
 
 import com.example.bora.model.Event
+import java.time.LocalDateTime
 import java.util.UUID
 
 object EventRepository {
@@ -15,7 +16,7 @@ object EventRepository {
                 name = "Churrasco na Praia",
                 description = "Churrasco open bar com música ao vivo e piscina natural. Traga sua canga e venha curtir!",
                 address = "Av. Boa Viagem, 1500 - Boa Viagem, Recife - PE",
-                date = "14/06/26 - 12:00",
+                date = LocalDateTime.of(2026, 6, 14, 12, 0),
                 hasGuestLimit = true,
                 guestLimit = 30,
                 isPublic = true
@@ -26,7 +27,7 @@ object EventRepository {
                 name = "Rapel no Marco Zero",
                 description = "Venha praticar rapel nas paredes do prédio histórico com instrutor certificado. Equipamento incluso.",
                 address = "Praça do Marco Zero, s/n - Recife Antigo, Recife - PE",
-                date = "20/06/26 - 19:30",
+                date = LocalDateTime.of(2026, 6, 20, 19, 30),
                 hasGuestLimit = true,
                 guestLimit = 10,
                 isPublic = true
@@ -37,7 +38,7 @@ object EventRepository {
                 name = "Feira de Artesanato",
                 description = "Exposição e venda de artesanato local com artesãos de Pernambuco. Música regional ao vivo.",
                 address = "Rua do Bom Jesus, 200 - Recife Antigo, Recife - PE",
-                date = "18/06/26 - 15:00",
+                date = LocalDateTime.of(2026, 6, 18, 15, 0),
                 hasGuestLimit = false,
                 guestLimit = 0,
                 isPublic = true
@@ -48,7 +49,7 @@ object EventRepository {
                 name = "Piquenique no Parque",
                 description = "Piquenique colaborativo no Parque da Jaqueira. Cada um leva um prato e compartilhamos!",
                 address = "Parque da Jaqueira, s/n - Jaqueira, Recife - PE",
-                date = "25/06/26 - 09:00",
+                date = LocalDateTime.of(2026, 6, 25, 9, 0),
                 hasGuestLimit = false,
                 guestLimit = 0,
                 isPublic = true
@@ -59,7 +60,7 @@ object EventRepository {
                 name = "Sarau na Aurora",
                 description = "Noite de poesia, música e microfone aberto com artistas independentes. Cerveja artesanal cortesia.",
                 address = "Rua da Aurora, 500 - Santo Amaro, Recife - PE",
-                date = "22/06/26 - 20:00",
+                date = LocalDateTime.of(2026, 6, 22, 20, 0),
                 hasGuestLimit = true,
                 guestLimit = 50,
                 isPublic = true

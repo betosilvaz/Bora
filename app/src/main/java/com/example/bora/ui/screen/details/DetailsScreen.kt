@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.bora.model.EVENT_DATE_FORMATTER
 import com.example.bora.ui.screen.login.FieldLabel
 
 @Composable
@@ -96,7 +97,7 @@ fun DetailsScreen(
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     Text(
-                        text = event.date,
+                        text = event.date.format(EVENT_DATE_FORMATTER),
                         fontSize = 14.sp,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                     )

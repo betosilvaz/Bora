@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 
+import com.example.bora.model.EVENT_DATE_FORMATTER
 import com.example.bora.model.Event
 import com.example.bora.ui.screen.login.FieldLabel
 
@@ -207,7 +208,7 @@ fun ExploreEventCard(event: Event, onClick: (() -> Unit)? = null) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = event.date,
+                    text = event.date.format(EVENT_DATE_FORMATTER),
                     color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 12.sp
