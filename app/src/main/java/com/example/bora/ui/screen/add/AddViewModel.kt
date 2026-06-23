@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bora.localStorage.LocalStorage
 import com.example.bora.model.Event
+import com.example.bora.model.ExtraSection
 import com.example.bora.repository.EventRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,6 +23,7 @@ data class AddUiState(
     val isPublic: Boolean = false,
     val isSuccess: Boolean = false,
     val isLoading: Boolean = false,
+    val extraSections: MutableList<ExtraSection> = mutableListOf()
 ) {
     val isValid: Boolean get() =
         name.isNotBlank() && description.isNotBlank() && address.isNotBlank() && date.isNotBlank()
@@ -39,6 +41,36 @@ class AddViewModel : ViewModel() {
     fun updateGuestLimit(value: String) { _uiState.update { it.copy(guestLimit = value.filter { c -> c.isDigit() }) } }
     fun updateIsPublic(value: Boolean) { _uiState.update { it.copy(isPublic = value) } }
 
+    fun addExtraSection() {
+        _uiState.update {
+            it.copy(extraSections = (it.extraSections + ExtraSection("", "")).toMutableList())
+        }
+    }
+
+    fun removeExtraSection(index: Int) {
+        _uiState.update {
+            val updated = it.extraSections.toMutableList()
+            updated.removeAt(index)
+            it.copy(extraSections = updated)
+        }
+    }
+
+    fun updateExtraSectionTitle(index: Int, title: String) {
+        _uiState.update {
+            val updated = it.extraSections.toMutableList()
+            updated[index] = updated[index].copy(title = title)
+            it.copy(extraSections = updated)
+        }
+    }
+
+    fun updateExtraSectionBody(index: Int, body: String) {
+        _uiState.update {
+            val updated = it.extraSections.toMutableList()
+            updated[index] = updated[index].copy(body = body)
+            it.copy(extraSections = updated)
+        }
+    }
+
     fun save() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
@@ -52,7 +84,8 @@ class AddViewModel : ViewModel() {
                 date = state.date,
                 hasGuestLimit = state.hasGuestLimit,
                 guestLimit = state.guestLimit.toIntOrNull() ?: 0,
-                isPublic = state.isPublic
+                isPublic = state.isPublic,
+                extraSection = state.extraSections
             )
             EventRepository.all().add(event)
             _uiState.update { it.copy(isSuccess = true, isLoading = false) }

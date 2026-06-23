@@ -13,8 +13,15 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -184,6 +191,72 @@ fun AddScreen(
                             uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant
                         )
                     )
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+                HorizontalDivider(thickness = 0.5.dp)
+                Spacer(modifier = Modifier.height(14.dp))
+
+                FieldLabel("Seções extras")
+                Spacer(modifier = Modifier.height(8.dp))
+
+                state.extraSections.forEachIndexed { index, section ->
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Seção ${index + 1}",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.Medium,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.weight(1f)
+                        )
+                        IconButton(onClick = { viewModel.removeExtraSection(index) }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Close,
+                                contentDescription = "Remover seção",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(4.dp))
+                    OutlinedTextField(
+                        value = section.title,
+                        onValueChange = { viewModel.updateExtraSectionTitle(index, it) },
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Título da seção") },
+                        shape = RoundedCornerShape(4.dp),
+                        singleLine = true
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    OutlinedTextField(
+                        value = section.body,
+                        onValueChange = { viewModel.updateExtraSectionBody(index, it) },
+                        modifier = Modifier.fillMaxWidth(),
+                        placeholder = { Text("Conteúdo da seção") },
+                        shape = RoundedCornerShape(4.dp),
+                        minLines = 2,
+                        maxLines = 4
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(12.dp))
+                OutlinedButton(
+                    onClick = { viewModel.addExtraSection() },
+                    modifier = Modifier.fillMaxWidth().height(46.dp),
+                    shape = RoundedCornerShape(4.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Add,
+                        contentDescription = null,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                    Text(text = "Adicionar seção", fontSize = 14.sp, fontWeight = FontWeight.Medium)
                 }
 
                 Spacer(modifier = Modifier.height(24.dp))
