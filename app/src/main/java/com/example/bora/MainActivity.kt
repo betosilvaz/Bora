@@ -34,6 +34,7 @@ import com.example.bora.ui.screen.forgotPassword.ForgotPasswordScreen
 import com.example.bora.ui.screen.login.LoginScreen
 import com.example.bora.ui.screen.login.LoginViewModel
 import com.example.bora.ui.screen.map.MapScreen
+import com.example.bora.ui.screen.map.MapViewModel
 import com.example.bora.ui.screen.menu.MenuScreen
 import com.example.bora.ui.screen.menu.MenuViewModel
 import com.example.bora.ui.screen.search.SearchScreen
@@ -150,7 +151,15 @@ fun Router() {
             }
             navigation(route = "main", startDestination = Route.Map.route) {
                 composable(Route.Map.route) {
-                    MapScreen()
+                    val viewModel: MapViewModel = viewModel()
+                    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+                    MapScreen(
+                        state = state,
+                        onClickEvent = { eventId ->
+                            navController.navigate("details/$eventId")
+                        }
+                    )
                 }
                 composable(Route.Search.route) {
                     val viewModel: SearchViewModel = viewModel()
