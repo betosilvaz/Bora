@@ -115,7 +115,7 @@ class AccountViewModel : ViewModel() {
             val newPassword = _uiState.value.newPasswordInput
             val confirmNewPassword = _uiState.value.confirmPasswordInput
 
-            val dto: UpdateUserDto = UpdateUserDto(id, username, email, currentPassword, newPassword, confirmNewPassword)
+            val dto = UpdateUserDto(id, username, email, currentPassword, newPassword, confirmNewPassword)
             val response = UserService.update(dto)
 
             if(response.status == "SUCCESS") {

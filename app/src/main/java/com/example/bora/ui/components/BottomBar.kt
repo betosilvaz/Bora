@@ -69,7 +69,6 @@ fun BottomBar(
                         Icon(imageVector = Icons.Outlined.Search, contentDescription = null, modifier = iconModifier)
                     }
 
-                    // Espaço vazio para o botão central "respirar"
                     Box(modifier = Modifier.size(56.dp))
 
                     IconButton(

@@ -56,7 +56,7 @@ class SignupViewModel : ViewModel() {
     fun signup() {
         viewModelScope.launch {
             try {
-                val user: CreateUserDto = CreateUserDto(
+                val user = CreateUserDto(
                     _uiState.value.username,
                     _uiState.value.email,
                     _uiState.value.password,
